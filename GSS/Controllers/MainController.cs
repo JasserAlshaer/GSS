@@ -27,17 +27,34 @@ namespace GSS.Controllers
             }
             else
             {
-                return View("Index");
+                // Employee Login 
+
+                //Student Login
+
+                //Admin Login
+
+                return View();
             }
         }
         public IActionResult Index()
         {
             return View();
         }
-
-        public IActionResult Departments() {
-            var deps = _context.Departments.ToList();
-            return View(deps); 
+        public IActionResult Students()
+        {
+            return View();
+        }
+        public IActionResult Employees()
+        {
+            return View();
+        }
+        public IActionResult Reports()
+        {
+            return View();
+        }
+        public IActionResult Invoices()
+        {
+            return View();
         }
     }
 }
