@@ -33,8 +33,14 @@ namespace GSS.Controllers
                 //Student Login
 
                 //Admin Login
+                if(user.UserTypeId == 1)
+                {
+                    HttpContext.Session.SetString("IsAdmin", "true");
+                    return RedirectToAction("Index");
+                }
 
                 return View();
+               
             }
         }
         public IActionResult Index()
@@ -64,7 +70,16 @@ namespace GSS.Controllers
         }
         public IActionResult Reports()
         {
-            return View(_context.Reports.ToList());
+            string isadminloggedIn = HttpContext.Session.GetString("IsAdmin");
+            if (isadminloggedIn == "true")
+            {
+                return View(_context.Reports.ToList());
+            }
+            else
+            {
+                return RedirectToAction("Login");
+            }
+            
         }
         public IActionResult Invoices()
         {
@@ -77,19 +92,19 @@ namespace GSS.Controllers
             var report = _context.Reports.FirstOrDefault(x => x.Id == id);
             return View(report);
         }
-        [HttpPut]
+        [HttpPost]
         public IActionResult Edit(int id,string title,DateTime requestdate,float DueAmount)
         {
             var report = _context.Reports.FirstOrDefault(x => x.Id == id);
             report.Title = title;
             report.DueAmount = DueAmount;
-            report.RequetDate = requestdate;
+            //report.RequetDate = requestdate;
             _context.Update(report);
             _context.SaveChanges();
             return RedirectToAction("Reports");
 
         }
-        public IActionResult Delete(int id)
+        public IActionResult Delete(int id,string test,bool isxc)
         {
             var report = _context.Reports.FirstOrDefault(x => x.Id == id);
             _context.Remove(report);
