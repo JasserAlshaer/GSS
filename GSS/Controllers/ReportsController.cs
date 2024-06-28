@@ -21,6 +21,10 @@ namespace GSS.Controllers
         // GET: Reports
         public async Task<IActionResult> Index()
         {
+            var userid = HttpContext.Session.GetInt32("UserId");
+            var userLogin = _context.Users.Where(x => x.Id == userid).Single();
+            if (userLogin == null)
+                return RedirectToAction("Login");
             var gssContext = _context.Reports.Include(r => r.User);
             return View(await gssContext.ToListAsync());
         }
@@ -28,6 +32,10 @@ namespace GSS.Controllers
         // GET: Reports/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            var userid = HttpContext.Session.GetInt32("UserId");
+            var userLogin = _context.Users.Where(x => x.Id == userid).Single();
+            if (userLogin == null)
+                return RedirectToAction("Login");
             if (id == null || _context.Reports == null)
             {
                 return NotFound();
@@ -47,6 +55,10 @@ namespace GSS.Controllers
         // GET: Reports/Create
         public IActionResult Create()
         {
+            var userid = HttpContext.Session.GetInt32("UserId");
+            var userLogin = _context.Users.Where(x => x.Id == userid).Single();
+            if (userLogin == null)
+                return RedirectToAction("Login");
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id");
             return View();
         }
@@ -58,6 +70,10 @@ namespace GSS.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Title,RequetDate,GeneratedDate,DueAmount,IsPaid,IsComplete,IsPublished,UserId")] Report report)
         {
+            var userid = HttpContext.Session.GetInt32("UserId");
+            var userLogin = _context.Users.Where(x => x.Id == userid).Single();
+            if (userLogin == null)
+                return RedirectToAction("Login");
             if (ModelState.IsValid)
             {
                 _context.Add(report);
@@ -71,6 +87,10 @@ namespace GSS.Controllers
         // GET: Reports/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            var userid = HttpContext.Session.GetInt32("UserId");
+            var userLogin = _context.Users.Where(x => x.Id == userid).Single();
+            if (userLogin == null)
+                return RedirectToAction("Login");
             if (id == null || _context.Reports == null)
             {
                 return NotFound();
@@ -92,6 +112,10 @@ namespace GSS.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Title,RequetDate,GeneratedDate,DueAmount,IsPaid,IsComplete,IsPublished,UserId")] Report report)
         {
+            var userid = HttpContext.Session.GetInt32("UserId");
+            var userLogin = _context.Users.Where(x => x.Id == userid).Single();
+            if (userLogin == null)
+                return RedirectToAction("Login");
             if (id != report.Id)
             {
                 return NotFound();
@@ -124,6 +148,10 @@ namespace GSS.Controllers
         // GET: Reports/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            var userid = HttpContext.Session.GetInt32("UserId");
+            var userLogin = _context.Users.Where(x => x.Id == userid).Single();
+            if (userLogin == null)
+                return RedirectToAction("Login");
             if (id == null || _context.Reports == null)
             {
                 return NotFound();
@@ -145,6 +173,10 @@ namespace GSS.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            var userid = HttpContext.Session.GetInt32("UserId");
+            var userLogin = _context.Users.Where(x => x.Id == userid).Single();
+            if (userLogin == null)
+                return RedirectToAction("Login");
             if (_context.Reports == null)
             {
                 return Problem("Entity set 'GssContext.Reports'  is null.");

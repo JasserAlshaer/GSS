@@ -21,7 +21,11 @@ namespace GSS.Controllers
         // GET: Departments
         public async Task<IActionResult> Index()
         {
-              return _context.Departments != null ? 
+            var id = HttpContext.Session.GetInt32("UserId");
+            var user = _context.Users.Where(x => x.Id == id).Single();
+            if (user == null)
+                return RedirectToAction("Login");
+            return _context.Departments != null ? 
                           View(await _context.Departments.ToListAsync()) :
                           Problem("Entity set 'GssContext.Departments'  is null.");
         }
@@ -29,6 +33,10 @@ namespace GSS.Controllers
         // GET: Departments/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            var userid = HttpContext.Session.GetInt32("UserId");
+            var userLogin = _context.Users.Where(x => x.Id == userid).Single();
+            if (userLogin == null)
+                return RedirectToAction("Login");
             if (id == null || _context.Departments == null)
             {
                 return NotFound();
@@ -47,6 +55,10 @@ namespace GSS.Controllers
         // GET: Departments/Create
         public IActionResult Create()
         {
+            var userid = HttpContext.Session.GetInt32("UserId");
+            var userLogin = _context.Users.Where(x => x.Id == userid).Single();
+            if (userLogin == null)
+                return RedirectToAction("Login");
             return View();
         }
 
@@ -57,6 +69,10 @@ namespace GSS.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name")] Department department)
         {
+            var userid = HttpContext.Session.GetInt32("UserId");
+            var userLogin = _context.Users.Where(x => x.Id == userid).Single();
+            if (userLogin == null)
+                return RedirectToAction("Login");
             if (ModelState.IsValid)
             {
                 _context.Add(department);
@@ -69,6 +85,10 @@ namespace GSS.Controllers
         // GET: Departments/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            var userid = HttpContext.Session.GetInt32("UserId");
+            var userLogin = _context.Users.Where(x => x.Id == userid).Single();
+            if (userLogin == null)
+                return RedirectToAction("Login");
             if (id == null || _context.Departments == null)
             {
                 return NotFound();
@@ -89,6 +109,10 @@ namespace GSS.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] Department department)
         {
+            var userid = HttpContext.Session.GetInt32("UserId");
+            var userLogin = _context.Users.Where(x => x.Id == userid).Single();
+            if (userLogin == null)
+                return RedirectToAction("Login");
             if (id != department.Id)
             {
                 return NotFound();
@@ -120,6 +144,10 @@ namespace GSS.Controllers
         // GET: Departments/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            var userid = HttpContext.Session.GetInt32("UserId");
+            var userLogin = _context.Users.Where(x => x.Id == userid).Single();
+            if (userLogin == null)
+                return RedirectToAction("Login");
             if (id == null || _context.Departments == null)
             {
                 return NotFound();
@@ -140,6 +168,10 @@ namespace GSS.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            var userid = HttpContext.Session.GetInt32("UserId");
+            var userLogin = _context.Users.Where(x => x.Id == userid).Single();
+            if (userLogin == null)
+                return RedirectToAction("Login");
             if (_context.Departments == null)
             {
                 return Problem("Entity set 'GssContext.Departments'  is null.");
@@ -156,6 +188,7 @@ namespace GSS.Controllers
 
         private bool DepartmentExists(int id)
         {
+
           return (_context.Departments?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }

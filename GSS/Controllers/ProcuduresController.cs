@@ -21,6 +21,10 @@ namespace GSS.Controllers
         // GET: Procudures
         public async Task<IActionResult> Index()
         {
+            var userid = HttpContext.Session.GetInt32("UserId");
+            var userLogin = _context.Users.Where(x => x.Id == userid).Single();
+            if (userLogin == null)
+                return RedirectToAction("Login");
             var gssContext = _context.Procudures.Include(p => p.Department);
             return View(await gssContext.ToListAsync());
         }
@@ -28,6 +32,10 @@ namespace GSS.Controllers
         // GET: Procudures/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            var userid = HttpContext.Session.GetInt32("UserId");
+            var userLogin = _context.Users.Where(x => x.Id == userid).Single();
+            if (userLogin == null)
+                return RedirectToAction("Login");
             if (id == null || _context.Procudures == null)
             {
                 return NotFound();
@@ -47,6 +55,10 @@ namespace GSS.Controllers
         // GET: Procudures/Create
         public IActionResult Create()
         {
+            var userid = HttpContext.Session.GetInt32("UserId");
+            var userLogin = _context.Users.Where(x => x.Id == userid).Single();
+            if (userLogin == null)
+                return RedirectToAction("Login");
             ViewData["DepartmentId"] = new SelectList(_context.Departments, "Id", "Name");
             return View();
         }
@@ -58,6 +70,10 @@ namespace GSS.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Title,MinAmount,MaxAmount,DefaultAmount,DepartmentId")] Procudure procudure)
         {
+            var userid = HttpContext.Session.GetInt32("UserId");
+            var userLogin = _context.Users.Where(x => x.Id == userid).Single();
+            if (userLogin == null)
+                return RedirectToAction("Login");
             if (ModelState.IsValid)
             {
                 _context.Add(procudure);
@@ -71,6 +87,10 @@ namespace GSS.Controllers
         // GET: Procudures/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            var userid = HttpContext.Session.GetInt32("UserId");
+            var userLogin = _context.Users.Where(x => x.Id == userid).Single();
+            if (userLogin == null)
+                return RedirectToAction("Login");
             if (id == null || _context.Procudures == null)
             {
                 return NotFound();
@@ -92,6 +112,10 @@ namespace GSS.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Title,MinAmount,MaxAmount,DefaultAmount,DepartmentId")] Procudure procudure)
         {
+            var userid = HttpContext.Session.GetInt32("UserId");
+            var userLogin = _context.Users.Where(x => x.Id == userid).Single();
+            if (userLogin == null)
+                return RedirectToAction("Login");
             if (id != procudure.Id)
             {
                 return NotFound();
@@ -124,6 +148,10 @@ namespace GSS.Controllers
         // GET: Procudures/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            var userid = HttpContext.Session.GetInt32("UserId");
+            var userLogin = _context.Users.Where(x => x.Id == userid).Single();
+            if (userLogin == null)
+                return RedirectToAction("Login");
             if (id == null || _context.Procudures == null)
             {
                 return NotFound();
@@ -145,6 +173,10 @@ namespace GSS.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            var userid = HttpContext.Session.GetInt32("UserId");
+            var userLogin = _context.Users.Where(x => x.Id == userid).Single();
+            if (userLogin == null)
+                return RedirectToAction("Login");
             if (_context.Procudures == null)
             {
                 return Problem("Entity set 'GssContext.Procudures'  is null.");

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using GSS.Models;
+using GSS.Helper;
 
 namespace GSS.Controllers
 {
@@ -21,6 +22,10 @@ namespace GSS.Controllers
         // GET: Student
         public async Task<IActionResult> Index()
         {
+            var userid = HttpContext.Session.GetInt32("UserId");
+            var userLogin = _context.Users.Where(x => x.Id == userid).Single();
+            if (userLogin == null)
+                return RedirectToAction("Login");
             var gssContext = _context.Users.Where(x => x.UserTypeId == 3).Include(u => u.Department).Include(u => u.UserType);
             return View(await gssContext.ToListAsync());
         }
@@ -28,6 +33,10 @@ namespace GSS.Controllers
         // GET: Student/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            var userid = HttpContext.Session.GetInt32("UserId");
+            var userLogin = _context.Users.Where(x => x.Id == userid).Single();
+            if (userLogin == null)
+                return RedirectToAction("Login");
             if (id == null || _context.Users == null)
             {
                 return NotFound();
@@ -48,6 +57,10 @@ namespace GSS.Controllers
         // GET: Student/Create
         public IActionResult Create()
         {
+            var userid = HttpContext.Session.GetInt32("UserId");
+            var userLogin = _context.Users.Where(x => x.Id == userid).Single();
+            if (userLogin == null)
+                return RedirectToAction("Login");
             ViewData["DepartmentId"] = new SelectList(_context.Departments, "Id", "Name");
             ViewData["UserTypeId"] = new SelectList(_context.UserTypes, "Id", "Name");
             return View();
@@ -60,8 +73,14 @@ namespace GSS.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,Phone,Email,Password,ImagePath,Uid,UserTypeId,BirthDate,DepartmentId")] User user)
         {
+            var userid = HttpContext.Session.GetInt32("UserId");
+            var userLogin = _context.Users.Where(x => x.Id == userid).Single();
+            if (userLogin == null)
+                return RedirectToAction("Login");
             if (ModelState.IsValid)
             {
+                user.Email = EncryptionHelper.Sha384(user.Email);
+                user.Password = EncryptionHelper.Sha384(user.Password);
                 _context.Add(user);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -74,6 +93,10 @@ namespace GSS.Controllers
         // GET: Student/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            var userid = HttpContext.Session.GetInt32("UserId");
+            var userLogin = _context.Users.Where(x => x.Id == userid).Single();
+            if (userLogin == null)
+                return RedirectToAction("Login");
             if (id == null || _context.Users == null)
             {
                 return NotFound();
@@ -96,6 +119,10 @@ namespace GSS.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Phone,Email,Password,ImagePath,Uid,UserTypeId,BirthDate,DepartmentId")] User user)
         {
+            var userid = HttpContext.Session.GetInt32("UserId");
+            var userLogin = _context.Users.Where(x => x.Id == userid).Single();
+            if (userLogin == null)
+                return RedirectToAction("Login");
             if (id != user.Id)
             {
                 return NotFound();
@@ -129,6 +156,10 @@ namespace GSS.Controllers
         // GET: Student/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            var userid = HttpContext.Session.GetInt32("UserId");
+            var userLogin = _context.Users.Where(x => x.Id == userid).Single();
+            if (userLogin == null)
+                return RedirectToAction("Login");
             if (id == null || _context.Users == null)
             {
                 return NotFound();
@@ -151,6 +182,10 @@ namespace GSS.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            var userid = HttpContext.Session.GetInt32("UserId");
+            var userLogin = _context.Users.Where(x => x.Id == userid).Single();
+            if (userLogin == null)
+                return RedirectToAction("Login");
             if (_context.Users == null)
             {
                 return Problem("Entity set 'GssContext.Users'  is null.");

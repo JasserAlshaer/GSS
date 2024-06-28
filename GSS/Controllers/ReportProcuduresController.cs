@@ -21,6 +21,10 @@ namespace GSS.Controllers
         // GET: ReportProcudures
         public async Task<IActionResult> Index()
         {
+            var userid = HttpContext.Session.GetInt32("UserId");
+            var userLogin = _context.Users.Where(x => x.Id == userid).Single();
+            if (userLogin == null)
+                return RedirectToAction("Login");
             var gssContext = _context.ReportProcudures.Include(r => r.Procudure).Include(r => r.Report);
             return View(await gssContext.ToListAsync());
         }
@@ -28,6 +32,10 @@ namespace GSS.Controllers
         // GET: ReportProcudures/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            var userid = HttpContext.Session.GetInt32("UserId");
+            var userLogin = _context.Users.Where(x => x.Id == userid).Single();
+            if (userLogin == null)
+                return RedirectToAction("Login");
             if (id == null || _context.ReportProcudures == null)
             {
                 return NotFound();
@@ -48,6 +56,10 @@ namespace GSS.Controllers
         // GET: ReportProcudures/Create
         public IActionResult Create()
         {
+            var userid = HttpContext.Session.GetInt32("UserId");
+            var userLogin = _context.Users.Where(x => x.Id == userid).Single();
+            if (userLogin == null)
+                return RedirectToAction("Login");
             ViewData["ProcudureId"] = new SelectList(_context.Procudures, "Id", "Id");
             ViewData["ReportId"] = new SelectList(_context.Reports, "Id", "Id");
             return View();
@@ -60,6 +72,10 @@ namespace GSS.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,ProcudureId,ReportId,ActualAmount")] ReportProcudure reportProcudure)
         {
+            var userid = HttpContext.Session.GetInt32("UserId");
+            var userLogin = _context.Users.Where(x => x.Id == userid).Single();
+            if (userLogin == null)
+                return RedirectToAction("Login");
             if (ModelState.IsValid)
             {
                 _context.Add(reportProcudure);
@@ -74,6 +90,10 @@ namespace GSS.Controllers
         // GET: ReportProcudures/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            var userid = HttpContext.Session.GetInt32("UserId");
+            var userLogin = _context.Users.Where(x => x.Id == userid).Single();
+            if (userLogin == null)
+                return RedirectToAction("Login");
             if (id == null || _context.ReportProcudures == null)
             {
                 return NotFound();
@@ -96,6 +116,10 @@ namespace GSS.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,ProcudureId,ReportId,ActualAmount")] ReportProcudure reportProcudure)
         {
+            var userid = HttpContext.Session.GetInt32("UserId");
+            var userLogin = _context.Users.Where(x => x.Id == userid).Single();
+            if (userLogin == null)
+                return RedirectToAction("Login");
             if (id != reportProcudure.Id)
             {
                 return NotFound();
@@ -129,6 +153,10 @@ namespace GSS.Controllers
         // GET: ReportProcudures/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            var userid = HttpContext.Session.GetInt32("UserId");
+            var userLogin = _context.Users.Where(x => x.Id == userid).Single();
+            if (userLogin == null)
+                return RedirectToAction("Login");
             if (id == null || _context.ReportProcudures == null)
             {
                 return NotFound();
@@ -151,6 +179,10 @@ namespace GSS.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            var userid = HttpContext.Session.GetInt32("UserId");
+            var userLogin = _context.Users.Where(x => x.Id == userid).Single();
+            if (userLogin == null)
+                return RedirectToAction("Login");
             if (_context.ReportProcudures == null)
             {
                 return Problem("Entity set 'GssContext.ReportProcudures'  is null.");

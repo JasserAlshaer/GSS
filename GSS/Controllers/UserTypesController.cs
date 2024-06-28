@@ -21,7 +21,11 @@ namespace GSS.Controllers
         // GET: UserTypes
         public async Task<IActionResult> Index()
         {
-              return _context.UserTypes != null ? 
+            var userid = HttpContext.Session.GetInt32("UserId");
+            var userLogin = _context.Users.Where(x => x.Id == userid).Single();
+            if (userLogin == null)
+                return RedirectToAction("Login");
+            return _context.UserTypes != null ? 
                           View(await _context.UserTypes.ToListAsync()) :
                           Problem("Entity set 'GssContext.UserTypes'  is null.");
         }
@@ -29,6 +33,10 @@ namespace GSS.Controllers
         // GET: UserTypes/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            var userid = HttpContext.Session.GetInt32("UserId");
+            var userLogin = _context.Users.Where(x => x.Id == userid).Single();
+            if (userLogin == null)
+                return RedirectToAction("Login");
             if (id == null || _context.UserTypes == null)
             {
                 return NotFound();
@@ -47,6 +55,10 @@ namespace GSS.Controllers
         // GET: UserTypes/Create
         public IActionResult Create()
         {
+            var userid = HttpContext.Session.GetInt32("UserId");
+            var userLogin = _context.Users.Where(x => x.Id == userid).Single();
+            if (userLogin == null)
+                return RedirectToAction("Login");
             return View();
         }
 
@@ -57,6 +69,10 @@ namespace GSS.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name")] UserType userType)
         {
+            var userid = HttpContext.Session.GetInt32("UserId");
+            var userLogin = _context.Users.Where(x => x.Id == userid).Single();
+            if (userLogin == null)
+                return RedirectToAction("Login");
             if (ModelState.IsValid)
             {
                 _context.Add(userType);
@@ -69,6 +85,10 @@ namespace GSS.Controllers
         // GET: UserTypes/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            var userid = HttpContext.Session.GetInt32("UserId");
+            var userLogin = _context.Users.Where(x => x.Id == userid).Single();
+            if (userLogin == null)
+                return RedirectToAction("Login");
             if (id == null || _context.UserTypes == null)
             {
                 return NotFound();
@@ -89,6 +109,10 @@ namespace GSS.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] UserType userType)
         {
+            var userid = HttpContext.Session.GetInt32("UserId");
+            var userLogin = _context.Users.Where(x => x.Id == userid).Single();
+            if (userLogin == null)
+                return RedirectToAction("Login");
             if (id != userType.Id)
             {
                 return NotFound();
@@ -120,6 +144,10 @@ namespace GSS.Controllers
         // GET: UserTypes/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            var userid = HttpContext.Session.GetInt32("UserId");
+            var userLogin = _context.Users.Where(x => x.Id == userid).Single();
+            if (userLogin == null)
+                return RedirectToAction("Login");
             if (id == null || _context.UserTypes == null)
             {
                 return NotFound();
@@ -140,6 +168,10 @@ namespace GSS.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            var userid = HttpContext.Session.GetInt32("UserId");
+            var userLogin = _context.Users.Where(x => x.Id == userid).Single();
+            if (userLogin == null)
+                return RedirectToAction("Login");
             if (_context.UserTypes == null)
             {
                 return Problem("Entity set 'GssContext.UserTypes'  is null.");

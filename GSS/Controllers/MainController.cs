@@ -1,4 +1,5 @@
 ﻿using GSS.DTO;
+using GSS.Helper;
 using GSS.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -21,6 +22,8 @@ namespace GSS.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(string email, string password)
         {
+            email = EncryptionHelper.Sha384(email);
+            password = EncryptionHelper.Sha384(password);
             var user = await _context.Users.FirstOrDefaultAsync
                 (x => x.Email == email && x.Password == password);
             if (user == null)
@@ -75,6 +78,7 @@ namespace GSS.Controllers
             {
                 if (password.Equals(newPassword))
                 {
+                    newPassword = EncryptionHelper.Sha384(newPassword);
                     user.Password = newPassword;
                     _context.Update(user);
                     _context.SaveChanges();
@@ -84,6 +88,7 @@ namespace GSS.Controllers
         }
         public IActionResult Index()
         {
+
             var id = HttpContext.Session.GetInt32("UserId");
             var user = _context.Users.Where(x => x.Id == id).Single();
             if (user != null)

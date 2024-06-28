@@ -25,6 +25,10 @@ namespace GSS.Controllers
         }
 
         public IActionResult Reports() {
+            var userid = HttpContext.Session.GetInt32("UserId");
+            var userLogin = _context.Users.Where(x => x.Id == userid).Single();
+            if (userLogin == null)
+                return RedirectToAction("Login");
             var id = HttpContext.Session.GetInt32("UserId");
             var gssContext = _context.Reports.Where(x=>x.UserId == id).Include(r => r.User);
             return View( gssContext.ToList());
@@ -32,12 +36,20 @@ namespace GSS.Controllers
 
         public IActionResult Invoices(int Id)
         {
+            var userid = HttpContext.Session.GetInt32("UserId");
+            var userLogin = _context.Users.Where(x => x.Id == userid).Single();
+            if (userLogin == null)
+                return RedirectToAction("Login");
             var gssContext = _context.Invoices.Where(x => x.ReportId == Id).Include(i => i.Report);
             return View(gssContext.ToList());
         }
 
         public IActionResult ReportDetails(int id)
         {
+            var userid = HttpContext.Session.GetInt32("UserId");
+            var userLogin = _context.Users.Where(x => x.Id == userid).Single();
+            if (userLogin == null)
+                return RedirectToAction("Login");
             if (id == null || _context.Reports == null)
             {
                 return NotFound();
@@ -56,6 +68,10 @@ namespace GSS.Controllers
 
         public IActionResult InvoiceDetails(int Id)
         {
+            var userid = HttpContext.Session.GetInt32("UserId");
+            var userLogin = _context.Users.Where(x => x.Id == userid).Single();
+            if (userLogin == null)
+                return RedirectToAction("Login");
             if (Id == null || _context.Invoices == null)
             {
                 return NotFound();
@@ -73,6 +89,10 @@ namespace GSS.Controllers
         }
         public IActionResult PayNow(int Id)
         {
+            var userid = HttpContext.Session.GetInt32("UserId");
+            var userLogin = _context.Users.Where(x => x.Id == userid).Single();
+            if (userLogin == null)
+                return RedirectToAction("Login");
             var report = _context.Reports.Where(x=>x.Id == Id).FirstOrDefault();
             ViewBag.ReportId = Id;
             ViewBag.Final = report.DueAmount;
@@ -82,6 +102,10 @@ namespace GSS.Controllers
         [HttpPost]
         public IActionResult PayByVisa(String visaNumber, int cvvCode,int reportId)
         {
+            var userid = HttpContext.Session.GetInt32("UserId");
+            var userLogin = _context.Users.Where(x => x.Id == userid).Single();
+            if (userLogin == null)
+                return RedirectToAction("Login");
             int? areThereId = HttpContext.Session.GetInt32("Id");
             if (areThereId != null && HttpContext.Session.GetString("Role") == "1")
             {
@@ -123,6 +147,10 @@ namespace GSS.Controllers
         [HttpPost]
         public IActionResult PayByPayPal(String email, string passwod, int reportId)
         {
+            var userid = HttpContext.Session.GetInt32("UserId");
+            var userLogin = _context.Users.Where(x => x.Id == userid).Single();
+            if (userLogin == null)
+                return RedirectToAction("Login");
             int? areThereId = HttpContext.Session.GetInt32("Id");
             if (areThereId != null && HttpContext.Session.GetString("Role") == "1")
             {
@@ -165,6 +193,10 @@ namespace GSS.Controllers
 
         public IActionResult PrintReport(int id)
         {
+            var userid = HttpContext.Session.GetInt32("UserId");
+            var userLogin = _context.Users.Where(x => x.Id == userid).Single();
+            if (userLogin == null)
+                return RedirectToAction("Login");
             // Fetch the report by Id
             var report = _context.Reports.Where(x=>x.Id == id).FirstOrDefault();
 
