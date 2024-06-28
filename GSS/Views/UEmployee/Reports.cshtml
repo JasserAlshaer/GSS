@@ -1,0 +1,41 @@
+﻿@model IEnumerable<GSS.Models.Report>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "_LayoutEmployee";
+}
+<h1>Index</h1>
+
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.Title)</th>
+                <th>@Html.DisplayNameFor(model => model.RequetDate)</th>
+                <th>@Html.DisplayNameFor(model => model.DueAmount)</th>
+                <th>@Html.DisplayNameFor(model => model.IsPaid)</th>
+                <th>@Html.DisplayNameFor(model => model.IsComplete)</th>
+                <th>@Html.DisplayNameFor(model => model.IsPublished)</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.Title)</td>
+                    <td>@Html.DisplayFor(modelItem => item.RequetDate)</td>
+                    <td>@Html.DisplayFor(modelItem => item.DueAmount)</td>
+                    <td>@Html.DisplayFor(modelItem => item.IsPaid)</td>
+                    <td>@Html.DisplayFor(modelItem => item.IsComplete)</td>
+                    <td>@Html.DisplayFor(modelItem => item.IsPublished)</td>
+                    <td>
+                        <a asp-action="Procudures" asp-route-id="@item.Id" class="btn btn-sm btn-outline-warning">Manage Produdure</a>
+                       
+                        <a asp-action="ReportDetails" asp-route-id="@item.Id" class="btn btn-sm btn-outline-info">Details</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

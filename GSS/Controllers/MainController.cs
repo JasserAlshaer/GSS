@@ -1,5 +1,6 @@
 ﻿using GSS.DTO;
 using GSS.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -28,88 +29,75 @@ namespace GSS.Controllers
             }
             else
             {
+                HttpContext.Session.SetInt32("UserId", user.Id);
                 // Employee Login 
+                if (user.UserTypeId == 2)
+                {
+
+                    HttpContext.Session.SetString("IsAdmin", "false");
+                    return RedirectToAction("Index", "UEmployee");
+                }
 
                 //Student Login
+                if (user.UserTypeId == 3)
+                {
+
+                    HttpContext.Session.SetString("IsStudent", "true");
+                    return RedirectToAction("Index", "GraduateStudent");
+                }
 
                 //Admin Login
-                if(user.UserTypeId == 1)
+                if (user.UserTypeId == 1)
                 {
+
                     HttpContext.Session.SetString("IsAdmin", "true");
                     return RedirectToAction("Index");
                 }
 
                 return View();
-               
+
+            }
+        }
+        
+        public IActionResult ResetPassword()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult ResetPassword(string email ,string password, string newPassword)
+        {
+            var user = _context.Users.Where(x => x.Email == email).FirstOrDefault();
+            if (user == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                if (password.Equals(newPassword))
+                {
+                    user.Password = newPassword;
+                    _context.Update(user);
+                    _context.SaveChanges();
+                }
+                return View("Login");
             }
         }
         public IActionResult Index()
         {
-            return View();
-        }
-        public IActionResult Students()
-        {
-
-            return View(_context.Users.Where(x => x.UserTypeId == 3).ToList());
-        }
-        public IActionResult Employees()
-        {
-            var response = from emp in _context.Users
-                           where emp.UserTypeId == 2
-                           select new EmployeeCardDTO
-                           {
-                               Id = emp.Id,
-                               Name = emp.Name,
-                               Email = emp.Email,
-                               Phone = emp.Phone,
-                               DepartmentName = emp.Department.Name
-                           };
-            var res1 = _context.Users.Where(x => x.UserTypeId == 2).Include
-                (x => x.Department).ToList();
-            return View(response.ToList());
-        }
-        public IActionResult Reports()
-        {
-            string isadminloggedIn = HttpContext.Session.GetString("IsAdmin");
-            if (isadminloggedIn == "true")
+            var id = HttpContext.Session.GetInt32("UserId");
+            var user = _context.Users.Where(x => x.Id == id).Single();
+            if (user != null)
             {
-                return View(_context.Reports.ToList());
+                return View(user);
             }
-            else
-            {
-                return RedirectToAction("Login");
-            }
-            
-        }
-        public IActionResult Invoices()
-        {
-            return View(_context.Invoices.ToList());
-        }
-
-        public IActionResult Edit(int id)
-        {
-
-            var report = _context.Reports.FirstOrDefault(x => x.Id == id);
-            return View(report);
-        }
-        [HttpPost]
-        public IActionResult Edit(int id,string title,DateTime requestdate,float DueAmount)
-        {
-            var report = _context.Reports.FirstOrDefault(x => x.Id == id);
-            report.Title = title;
-            report.DueAmount = DueAmount;
-            //report.RequetDate = requestdate;
-            _context.Update(report);
-            _context.SaveChanges();
-            return RedirectToAction("Reports");
+            return RedirectToAction("Login");
 
         }
-        public IActionResult Delete(int id,string test,bool isxc)
+        public IActionResult Logout()
         {
-            var report = _context.Reports.FirstOrDefault(x => x.Id == id);
-            _context.Remove(report);
-            _context.SaveChanges();
-            return RedirectToAction("Reports");
+            HttpContext.Session.Remove("UserId");
+            HttpContext.Session.Remove("IsAdmin");
+            return RedirectToAction("Login");
         }
     }
 }

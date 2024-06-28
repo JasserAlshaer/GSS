@@ -49,8 +49,8 @@
                                     @item.DepartmentName
                                 </td>
                                 <td colspan="2">
-                                    <a asp-action="" type="button" class="btn btn-sm btn-outline-primary">Edit</a>
-                                    <a asp-action="" type="button" class="btn btn-sm btn-outline-danger">Delete</a>
+                                    <a asp-action="EditEmployee" asp-route-Id="@item.Id" type="button" class="btn btn-sm btn-outline-primary">Edit</a>
+                                    <a asp-action="DisactivateEmployee" asp-route-Id="@item.Id"  type="button" class="btn btn-sm btn-outline-danger">Delete</a>
                                 </td>
                             </tr>
                         }

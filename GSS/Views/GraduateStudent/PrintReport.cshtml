@@ -1,0 +1,139 @@
+﻿@model Report
+@{
+    var list = ViewBag.List as List<ReportProcudure>;
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Report</title>
+    <style>
+        /* Define your CSS styles for the PDF here */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+            .header img {
+                width: 100px;
+                height: auto;
+            }
+
+        .table-container {
+            margin-top: 20px;
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+            .table-container th, .table-container td {
+                border: 1px solid black;
+                padding: 8px;
+                text-align: left;
+            }
+
+            .table-container th {
+                background-color: #f2f2f2;
+            }
+
+        .footer {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .save-button {
+            margin-bottom: 20px;
+            text-align: right;
+        }
+
+            .save-button button {
+                padding: 10px 20px;
+                font-size: 16px;
+                cursor: pointer;
+                background-color: #4CAF50;
+                color: white;
+                border: none;
+                border-radius: 5px;
+            }
+
+                .save-button button:hover {
+                    background-color: #45a049;
+                }
+
+        .table-container {
+            width: 100%;
+            text-align: center; /* Center align the table within its container */
+        }
+
+        .centered-table {
+            width: 100%; /* Make the table take up 100% of its container's width */
+            border-collapse: collapse; /* Collapse borders between table cells */
+        }
+
+            .centered-table th,
+            .centered-table td {
+                border: 1px solid #ccc; /* Example border styling */
+                padding: 8px; /* Padding inside table cells */
+            }
+
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+    <script>
+        function saveAsPDF() {
+            const element = document.body;
+            html2pdf()
+                .from(element)
+                .save('report.pdf');
+        }
+    </script>
+</head>
+<body>
+    <div class="save-button">
+        <button onclick="saveAsPDF()">Save as PDF</button>
+    </div>
+    <div class="header">
+        <img src="data:image/jpeg;base64,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" alt="Logo" />
+        <h2>Report</h2>
+    </div>
+    <div>
+        <p style="text-align:center"><strong>User Name:</strong> @Model.User?.Name</p>
+        <p style="text-align:center">  <strong>User ID:</strong> @Model.UserId</p>
+        <p style="text-align:center"><strong>User UID:</strong> @Model.User?.Uid</p>
+        <p style="text-align:center"><strong>Requested Date:</strong> @Model.RequetDate?.ToString("yyyy-MM-dd")</p>
+        <p style="text-align:center"><strong>Generated Date:</strong> @Model.GeneratedDate?.ToString("yyyy-MM-dd")</p>
+    </div>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Procedure ID</th>
+                    <th>Title</th>
+                    <th>Due Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var procedure in list)
+                {
+                    <tr>
+                        <td>@procedure.Procudure.Id</td>
+                        <td>@procedure.Procudure.Title</td>
+                        <td>@procedure.ActualAmount</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div>
+        <p><strong>Total Due Amount:</strong> @list.Sum(p => p.ActualAmount)</p>
+    </div>
+    <div class="footer">
+        <p>Admin Signature: _______________________</p>
+        <p>Footer content</p>
+    </div>
+</body>
+</html>

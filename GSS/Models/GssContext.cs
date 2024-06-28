@@ -19,6 +19,8 @@ public partial class GssContext : DbContext
 
     public virtual DbSet<Invoice> Invoices { get; set; }
 
+    public virtual DbSet<PaymentMethod> PaymentMethods { get; set; }
+
     public virtual DbSet<Procudure> Procudures { get; set; }
 
     public virtual DbSet<Report> Reports { get; set; }
@@ -31,7 +33,7 @@ public partial class GssContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=JASSER\\SQLEXPRESS;Database=GSS;Trusted_Connection=True;TrustServerCertificate=True;");
+        => optionsBuilder.UseSqlServer("Server=JASSER\\SQLEXPRESS;Database=GSS;Integrated Security=False;Trusted_Connection=True; TrustServerCertificate=True;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -56,6 +58,22 @@ public partial class GssContext : DbContext
             entity.HasOne(d => d.Report).WithMany(p => p.Invoices)
                 .HasForeignKey(d => d.ReportId)
                 .HasConstraintName("FK_Invoice_Report");
+        });
+
+        modelBuilder.Entity<PaymentMethod>(entity =>
+        {
+            entity.ToTable("PaymentMethod");
+
+            entity.Property(e => e.Email)
+                .HasMaxLength(5000)
+                .IsUnicode(false);
+            entity.Property(e => e.Expire).HasColumnType("date");
+            entity.Property(e => e.Password)
+                .HasMaxLength(5000)
+                .IsUnicode(false);
+            entity.Property(e => e.VisaNumber)
+                .HasMaxLength(5000)
+                .IsUnicode(false);
         });
 
         modelBuilder.Entity<Procudure>(entity =>

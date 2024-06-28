@@ -378,7 +378,7 @@ define(
     }
 
     function resolve(newValue) {
-      try { //Promise Resolution Procedure: https://github.com/promises-aplus/promises-spec#the-promise-resolution-procedure
+      try { //Promise Resolution Procudure: https://github.com/promises-aplus/promises-spec#the-promise-resolution-Procudure
         if (newValue === this) throw new TypeError('A promise cannot be resolved with itself.');
         if (newValue && (typeof newValue === 'object' || typeof newValue === 'function')) {
           var then = newValue.then;

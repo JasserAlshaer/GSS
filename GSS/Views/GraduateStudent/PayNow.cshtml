@@ -1,0 +1,124 @@
+﻿@{
+    var price = ViewBag.Final;
+    var reportId = ViewBag.ReportId;
+    Layout = "_LayoutStudent";
+}
+<!DocType html>
+<html>
+<head>
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <!------ Include the above in your HEAD tag ---------->
+    <link href="~/css/payment.css" rel="stylesheet" />
+</head>
+<body>
+    <br />
+    <br />
+    <div class="container" style="margin-left:8%;">
+        <div class="row">
+            <div class="col-xs-12 col-md-8">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            Payment Details
+                        </h3>
+                        <div class="checkbox pull-right">    
+                            <label>
+                                <input type="radio" value="paypal" name="type" onclick="onClickRadio(this.value)"/>
+                                Paypal
+                            </label>
+                            <label>
+                                <input type="radio" value="visa" name="type" onclick="onClickRadio(this.value)"/>
+                                Credit Card
+                            </label>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <script>
+                            function onClickRadio(a) {
+                                var checkType = document.getElementsByName("type").value;
+                                if (a == "visa") {
+                                    document.getElementById("visaForm").style.display = "inline-block";
+                                    document.getElementById("payForm").style.display = "none";
+                                } else if (a == "paypal") {
+                                    document.getElementById("visaForm").style.display = "none";
+                                    document.getElementById("payForm").style.display = "inline-block";
+                                }
+                            }
+
+                        </script>
+                        <form  asp-action="PayByVisa"   method="post"  role="form" id="visaForm" style="display:none;">
+                            <input type="hidden" class="form-control" name="reportId" id="reportId" value="@reportId" placeholder="Valid Card Number" />
+                            <div class="form-group">
+                                <label for="cardNumber">
+                                    CARD NUMBER
+                                </label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="visaNumber"  id="cardNumber" placeholder="Valid Card Number"
+                                           required autofocus />
+                                    <span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12 col-md-12">
+                                </div>
+                                <div class="col-xs-5 col-md-5 pull-right">
+                                    <div class="form-group">
+                                        <label for="cvCode">
+                                            CV CODE
+                                        </label>
+                                        <input type="password" class="form-control" name="cvvCode" id="cvCode" placeholder="CV" required />
+                                    </div>
+                                </div>
+                            </div>
+                            <ul class="nav nav-pills nav-stacked">
+                                <li class="active">
+                                    <a href="#"><span class="badge pull-right"><span class="glyphicon glyphicon-usd"></span>@price</span> Final Payment</a>
+                                </li>
+                            </ul>
+                            <br />
+                           
+                            <input type="submit" class="btn btn-success btn-lg btn-block" role="button" value="Pay"> 
+                        </form>
+                        <form  asp-action="PayByPayPal" role="form" id="payForm" style="display:none;">
+                            <input type="hidden" class="form-control" name="reportId" id="reportId" value="@reportId" placeholder="Valid Card Number" />
+                            <div class="form-group">
+                                <label for="cardNumber">
+                                    Email
+                                </label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="email" id="cardNumber" placeholder="Enter Your Email"
+                                           required autofocus />
+                                    <span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
+                                </div>
+                            </div>
+                            <div class="row">
+
+                                <div class="col-xs-12 col-md-12 pull-right">
+                                    <div class="form-group">
+                                        <label for="cvCode">
+                                            Password
+                                        </label>
+                                        <input type="password" class="form-control" name="passwod" id="cvCode" placeholder="password" required />
+                                    </div>
+                                </div>
+
+                            </div>
+                            <ul class="nav nav-pills nav-stacked">
+                                <li class="active">
+                                    <a href="#"><span class="badge pull-right"><span class="glyphicon glyphicon-usd"></span>@price</span> Final Payment</a>
+                                </li>
+                            </ul>
+                            <br />
+                           <input type="submit" class="btn btn-success btn-lg btn-block" role="button" value="Pay"> 
+                        </form>
+                    </div>
+                </div>
+               
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
